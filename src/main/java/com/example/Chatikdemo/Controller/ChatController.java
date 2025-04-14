@@ -1,4 +1,4 @@
-package Chatikdemo.Controller;
+package com.example.Chatikdemo.Controller;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;

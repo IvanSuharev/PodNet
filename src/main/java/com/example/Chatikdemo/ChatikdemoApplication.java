@@ -1,4 +1,4 @@
-package Chatikdemo;
+package com.example.Chatikdemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

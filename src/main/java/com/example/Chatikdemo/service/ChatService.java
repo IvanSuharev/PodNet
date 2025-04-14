@@ -1,4 +1,4 @@
-package Chatikdemo.service;
+package com.example.Chatikdemo.service;
 
 import java.util.concurrent.ThreadLocalRandom;
 
