@@ -12,6 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
     UserSevice userSevice;
+
     @PostMapping("/")
     public User createUser(@RequestBody User user) {
         return userSevice.addUser(user);
