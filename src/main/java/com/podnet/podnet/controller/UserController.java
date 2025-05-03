@@ -1,24 +1,22 @@
 package com.podnet.podnet.controller;
 
 import com.podnet.podnet.models.User;
-import com.podnet.podnet.schemas.FormRegistration;
-import com.podnet.podnet.service.UserSevice;
+import com.podnet.podnet.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
+@RequestMapping("/api")
+@AllArgsConstructor
 public class UserController {
-    UserSevice userSevice;
+    UserService userService;
 
-    public UserController(UserSevice userSevice) {
-        this.userSevice = userSevice;
+    @GetMapping("/all")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @PostMapping("/user/")
-    public User addUser(@RequestBody FormRegistration formRegistration) {
-        return userSevice.addUser(formRegistration);
-    }
 }
