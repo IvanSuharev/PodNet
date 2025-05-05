@@ -1,7 +1,4 @@
 package com.podnet.podnet.entity;
-
-import com.podnet.podnet.entity.Role;
-import com.podnet.podnet.entity.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -38,6 +36,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "author")
+    private List<Message> messages;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Chat> chats;
 
 
     @Override
