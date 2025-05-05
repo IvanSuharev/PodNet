@@ -1,18 +1,10 @@
 package com.podnet.podnet.service;
 
-import com.podnet.podnet.models.User;
-import com.podnet.podnet.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+public interface UserService extends UserDetailsService {
 
-import java.util.List;
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 
-@Service
-@AllArgsConstructor
-public class UserService {
-    UserRepository userRepository;
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 }

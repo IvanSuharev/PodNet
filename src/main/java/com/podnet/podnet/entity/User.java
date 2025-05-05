@@ -1,7 +1,11 @@
-package com.podnet.podnet.models;
+package com.podnet.podnet.entity;
 
+import com.podnet.podnet.entity.Role;
+import com.podnet.podnet.entity.Token;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,23 +13,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
 @Data
-@Table(name = "users")
-@RequiredArgsConstructor
-public class User implements UserDetails{
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "users_table")
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "username")
     private String username;
-    private String password;
+
+    @Column(name = "email")
     private String email;
-    private String description;
-    @Column(name = "phone_number")
-    private String phoneNumber;
+
+    @Column(name = "password")
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority((role.name())));
     }
 
     @Override
