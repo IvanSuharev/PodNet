@@ -3,9 +3,13 @@ package com.podnet.podnet.service;
 import com.podnet.podnet.entity.User;
 import com.podnet.podnet.repository.UserRepository;
 import com.podnet.podnet.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 /**
@@ -55,5 +59,9 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+    public Optional<User> getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(auth.getName());
     }
 }
