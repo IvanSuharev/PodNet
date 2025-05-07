@@ -7,6 +7,7 @@ import com.podnet.podnet.dto.RegistrationRequestDto;
 import com.podnet.podnet.entity.Role;
 import com.podnet.podnet.entity.Token;
 import com.podnet.podnet.entity.User;
+import com.podnet.podnet.entity.UserAUth;
 import com.podnet.podnet.repository.TokenRepository;
 import com.podnet.podnet.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,16 +61,16 @@ public class AuthenticationService {
      */
     public void register(RegistrationRequestDto request) {
         // Создание нового пользователя
-        User user = new User();
+        UserAUth UserAUth = new UserAUth();
 
         // Заполнение полей пользователя
-        user.setUsername(request.getUsername()); // устанавливаем имя пользователя
-        user.setEmail(request.getEmail()); // устанавливаем электронную почту пользователя
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // устанавливаем пароль пользователя
-        user.setRole(Role.USER); // устанавливаем роль пользователя
+//        UserAUth.setUsername(request.getUsername()); // устанавливаем имя пользователя
+//        userAUth.setEmail(request.getEmail()); // устанавливаем электронную почту пользователя
+//        user.setPassword(passwordEncoder.encode(request.getPassword())); // устанавливаем пароль пользователя
+//        user.setRole(Role.USER); // устанавливаем роль пользователя
 
-        // Сохранение пользователя в базе данных
-        user = userRepository.save(user); // сохраняем пользователя в базе данных
+//        // Сохранение пользователя в базе данных
+//        user = userRepository.save(user); // сохраняем пользователя в базе данных
 
     }
 
