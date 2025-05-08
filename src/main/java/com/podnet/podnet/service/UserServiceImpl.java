@@ -62,6 +62,11 @@ public class UserServiceImpl implements UserService {
     }
     public Optional<User> getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByUsername(auth.getName());
+        if (auth == null || !auth.isAuthenticated()) {
+            return Optional.empty();
+        }
+        String username = auth.getName();
+        return userRepository.findByUsername(username);
     }
+
 }

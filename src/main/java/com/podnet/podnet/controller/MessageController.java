@@ -1,47 +1,73 @@
 package com.podnet.podnet.controller;
 
+import com.podnet.podnet.dto.MessageDto;
+import com.podnet.podnet.entity.Chat;
 import com.podnet.podnet.entity.Message;
+import com.podnet.podnet.entity.User;
+import com.podnet.podnet.repository.ChatRepository;
 import com.podnet.podnet.repository.MessageRepository;
+import com.podnet.podnet.repository.UserRepository;
+import com.podnet.podnet.service.MessengerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 public class MessageController {
 
-    @Autowired // Добавлено внедрение зависимости
+    @Autowired
     private MessageRepository messageRepo;
+
+    @Autowired
+    private ChatRepository chatRepo;
+
+    @Autowired
+    private UserRepository userRepo;
 
     @MessageMapping("/chat.send")
     @SendToUser("/topic/message/{userId}")
-    public Message sendMessage(@Payload Message message) {
-        message.setTimestamp(LocalDateTime.now());
-        message = messageRepo.save(message);
+    public Message sendMessage(@Payload MessageDto messageDto) {
+        // Получаем сущности из БД
+        User author = userRepo.findById(messageDto.getAuthorId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Обновленный хедер для доставки сообщения
-        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
-                .create(SimpMessageType.MESSAGE);
-        headerAccessor.setDestination("/topic/message/" + message.getAuthor().getId());
-        return message;
+        Chat chat = chatRepo.findById(messageDto.getChatId())
+                .orElseThrow(() -> new EntityNotFoundException("Chat not found"));
+
+        // Создаем сообщение
+        Message message = new Message();
+        message.setContent(messageDto.getContent());
+        message.setTimestamp(LocalDateTime.now());
+        message.setAuthor(author);
+        message.setChat(chat);
+
+        return messageRepo.save(message);
     }
 
-//    @GetMapping("/message/{senderId}/{receiverId}")
-//    public ResponseEntity<List<Message>> getChatHistory(
-//            @PathVariable Long senderId,
-//            @PathVariable Long receiverId) {
-//        List<Message> messages = messageRepo.findBySenderIdAndReceiverId(senderId, receiverId);
-//        return ResponseEntity.ok(messages);
-//    }
-//    @PostMapping("/message")
-//    public ResponseEntity<Message> addChatMessage(@Payload Message message) {
-//        message.setTimestamp(LocalDateTime.now());
-//        messageRepo.save(message);
-//        return ResponseEntity.ok(message);
-//    }
+    @GetMapping("/chat/{chatId}/messages")
+    public ResponseEntity<List<Message>> getChatHistory(@PathVariable Long chatId) {
+        List<Message> messages = messageRepo.findByChatId(chatId);
+        return ResponseEntity.ok(messages);
+    }
+    @RestControllerAdvice
+    public class GlobalExceptionHandler {
+        @ExceptionHandler({
+                EntityNotFoundException.class,
+                SecurityException.class,
+                IllegalArgumentException.class
+        })
+        public ResponseEntity<String> handleBadRequestExceptions(Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
 }

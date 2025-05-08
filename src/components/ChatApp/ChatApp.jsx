@@ -11,7 +11,7 @@ const ChatApp = () => {
     const stompClient = useRef(null);
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS('http://localhost:8181/ws');
         stompClient.current = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,
