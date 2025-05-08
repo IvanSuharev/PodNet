@@ -7,7 +7,7 @@ import com.podnet.podnet.dto.RegistrationRequestDto;
 import com.podnet.podnet.entity.Role;
 import com.podnet.podnet.entity.Token;
 import com.podnet.podnet.entity.User;
-import com.podnet.podnet.entity.UserAUth;
+//import com.podnet.podnet.entity.User;
 import com.podnet.podnet.repository.TokenRepository;
 import com.podnet.podnet.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,7 +61,7 @@ public class AuthenticationService {
      */
     public void register(RegistrationRequestDto request) {
         // Создание нового пользователя
-        UserAUth UserAUth = new UserAUth();
+        User user = new User();
 
         // Заполнение полей пользователя
 //        UserAUth.setUsername(request.getUsername()); // устанавливаем имя пользователя
